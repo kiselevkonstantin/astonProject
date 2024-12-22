@@ -51,7 +51,7 @@ public class Barrel implements Comparable<Barrel> {
         }
     }
 
-    // Реализация Компаратора
+    // Реализация Компаратора, поочередное сравнение каждого поля, если по первому полю равны, то сравнивает по второму и т.д.
     @Override
     public int compareTo(Barrel o) {
         int result = Double.compare(this.volume, o.volume);

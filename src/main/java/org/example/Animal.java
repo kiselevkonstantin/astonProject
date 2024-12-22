@@ -51,7 +51,7 @@ public class Animal implements Comparable<Animal> {
         }
     }
 
-    // Реализация Компаратора
+    // Реализация Компаратора, поочередное сравнение каждого поля, если по первому полю равны, то сравнивает по второму и т.д.
     @Override
     public int compareTo(Animal o) {
         int result = this.type.compareTo(o.type);

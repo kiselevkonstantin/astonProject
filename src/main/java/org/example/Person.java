@@ -51,7 +51,7 @@ public class Person implements Comparable<Person> {
         }
     }
 
-    // Реализация Компаратора
+    // Реализация Компаратора, поочередное сравнение каждого поля, если по первому полю равны, то сравнивает по второму и т.д.
     @Override
     public int compareTo(Person o) {
         int result = this.gender.compareTo(o.gender);

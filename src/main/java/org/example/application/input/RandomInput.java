@@ -6,13 +6,12 @@ import org.example.application.dataclass.Barrel;
 import org.example.application.dataclass.Person;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class RandomInput implements InputSource {
     @Override
     public <T> ArrayList<T> read(Class<? extends T> tClass, int length, Scanner scanner) {
-        Faker faker = new Faker(Locale.of("ru-RU"));
+        Faker faker = new Faker();
         ArrayList<T> list = new ArrayList<>();
         switch (tClass.getSimpleName()) {
             case "Animal" -> {

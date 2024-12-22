@@ -47,7 +47,7 @@ public class FileInput implements InputSource {
 
     private List<String> getFileContent(Scanner scanner) {
         System.out.println("Укажите полное имя файла: ");
-        String filePath = scanner.next();
+        String filePath = scanner.nextLine();
         Validation.validateFilePath(filePath);
         Path path = Path.of(filePath);
         List<String> content = null;

@@ -7,11 +7,11 @@ import org.example.application.input.ConsoleInput;
 import org.example.application.input.FileInput;
 import org.example.application.input.InputReader;
 import org.example.application.input.RandomInput;
+import org.example.application.utils.BinSearch;
 import org.example.application.utils.TimSort;
 import org.example.application.utils.Validation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class App {
@@ -23,7 +23,7 @@ public class App {
         while (running) {
             try {
                 printStartMenu();
-                String choice = scanner.next();
+                String choice = scanner.nextLine();
                 Validation.validateChoice(choice);
 
                 switch (Integer.parseInt(choice)) {
@@ -39,12 +39,15 @@ public class App {
                         tClass = Person.class;
                         list = getList(tClass, scanner);
                     }
-                    case 4 -> list = sortList(list, tClass);
-                    case 5 -> System.out.println(findElement(list, tClass) ? "Элемент найден" : "Элемент не найден");
-                    case 6 -> running = false;
+                    case 4 -> sortList(list, tClass);
+                    case 5 -> {
+                        int index = findElement(list, tClass, scanner);
+                        System.out.println(index != -1 ? "Список предварительно отсортирован.\nЭлемент найден под индексом %d".formatted(index) : "Элемент не найден");
+                    }
+                    case 6 -> printList(list);
+                    case 7 -> running = false;
                     default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
                 }
-                System.out.println(list);
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
@@ -59,7 +62,8 @@ public class App {
         System.out.println("3. Заполнить данные (Люди)");
         System.out.println("4. Сортировать данные");
         System.out.println("5. Искать элемент");
-        System.out.println("6. Выход");
+        System.out.println("6. Печать данных");
+        System.out.println("7. Выход");
     }
 
     private void printInputSourceMenu() {
@@ -71,14 +75,14 @@ public class App {
 
     private int selectInputSource(Scanner scanner) {
         printInputSourceMenu();
-        String inputSource = scanner.next();
+        String inputSource = scanner.nextLine();
         Validation.validateInputSource(inputSource);
         return Integer.parseInt(inputSource);
     }
 
     private int getLength(Scanner scanner) {
         System.out.println("Укажите количество объектов (целое положительное число):");
-        String length = scanner.next();
+        String length = scanner.nextLine();
         Validation.validateLength(length);
         return Integer.parseInt(length);
     }
@@ -99,32 +103,40 @@ public class App {
         return inputReader.read(tClass, length);
     }
 
-    private ArrayList<?> sortList(ArrayList<?> list, Class<?> tClass) {
+    private void sortList(ArrayList<?> list, Class<?> tClass) {
         Validation.validateListNotEmpty(list);
         switch (tClass.getSimpleName()) {
-            case "Animal" -> {
-                Animal[] animals = list.toArray(new Animal[0]);
-                new TimSort<Animal>().sort(animals, Animal::compareTo);
-                list = new ArrayList<>(Arrays.stream(animals).toList());
-            }
-            case "Barrel" -> {
-                Barrel[] barrels = list.toArray(new Barrel[0]);
-                new TimSort<Barrel>().sort(barrels, Barrel::compareTo);
-                list = new ArrayList<>(Arrays.stream(barrels).toList());
-            }
-            case "Person" -> {
-                Person[] persons = list.toArray(new Person[0]);
-                new TimSort<Person>().sort(persons, Person::compareTo);
-                list = new ArrayList<>(Arrays.stream(persons).toList());
-            }
+            case "Animal" -> TimSort.run((ArrayList<Animal>) list, Animal::compareTo);
+            case "Barrel" -> TimSort.run((ArrayList<Barrel>) list, Barrel::compareTo);
+            case "Person" -> TimSort.run((ArrayList<Person>) list, Person::compareTo);
             default -> {
             }
         }
-        return list;
     }
 
-    private boolean findElement(ArrayList<?> list, Class<?> tClass) {
+    private int findElement(ArrayList<?> list, Class<?> tClass, Scanner scanner) {
         Validation.validateListNotEmpty(list);
-        return true;
+        switch (tClass.getSimpleName()) {
+            case "Animal" -> {
+                Animal key = ConsoleInput.readAnimal(scanner);
+                TimSort.run((ArrayList<Animal>) list, Animal::compareTo);
+                return BinSearch.run((ArrayList<Animal>) list, key, Animal::compareTo);
+            }
+            case "Barrel" -> {
+                Barrel key = ConsoleInput.readBarrel(scanner);
+                TimSort.run((ArrayList<Barrel>) list, Barrel::compareTo);
+                return BinSearch.run((ArrayList<Barrel>) list, key, Barrel::compareTo);
+            }
+            case "Person" -> {
+                Person key = ConsoleInput.readPerson(scanner);
+                TimSort.run((ArrayList<Person>) list, Person::compareTo);
+                return BinSearch.run((ArrayList<Person>) list, key, Person::compareTo);
+            }
+        }
+        return -1;
+    }
+
+    private void printList(ArrayList<?> list) {
+        System.out.println(list == null || list.isEmpty() ? "[]" : list);
     }
 }

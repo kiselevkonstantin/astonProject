@@ -41,11 +41,11 @@ public class ConsoleInput implements InputSource {
 
     public static Animal readAnimal(Scanner scanner) {
         System.out.println("Укажите вид животного:");
-        String kind = scanner.next();
+        String kind = scanner.nextLine();
         System.out.println("Укажите цвет глаз:");
-        String eyeColor = scanner.next();
+        String eyeColor = scanner.nextLine();
         System.out.println("Есть шерсть? (true/false)");
-        String hasFur = scanner.next();
+        String hasFur = scanner.nextLine();
         Validation.validateBooleanProperty(hasFur);
         return new Animal.Builder()
                 .kind(kind)
@@ -56,12 +56,12 @@ public class ConsoleInput implements InputSource {
 
     public static Barrel readBarrel(Scanner scanner) {
         System.out.println("Укажите объем бочки (целое число):");
-        String volume = scanner.next();
+        String volume = scanner.nextLine();
         Validation.validateVolume(volume);
         System.out.println("Укажите хранимый материал:");
-        String content = scanner.next();
+        String content = scanner.nextLine();
         System.out.println("Укажите материал бочки:");
-        String material = scanner.next();
+        String material = scanner.nextLine();
         return new Barrel.Builder()
                 .volume(Integer.parseInt(volume))
                 .content(content)
@@ -71,12 +71,12 @@ public class ConsoleInput implements InputSource {
 
     public static Person readPerson(Scanner scanner) {
         System.out.println("Укажите пол (м/ж):");
-        String sex = scanner.next();
+        String sex = scanner.nextLine();
         System.out.println("Укажите возраст (целое положительное число):");
-        String age = scanner.next();
+        String age = scanner.nextLine();
         Validation.validateAge(age);
         System.out.println("Укажите фамилию:");
-        String surname = scanner.next();
+        String surname = scanner.nextLine();
         return new Person.Builder()
                 .sex(sex)
                 .age(Integer.parseInt(age))

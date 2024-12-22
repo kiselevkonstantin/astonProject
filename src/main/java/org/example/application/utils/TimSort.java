@@ -44,7 +44,7 @@ public class TimSort {
         }
     }
 
-    private static <T> void merge(T[] array, Comparator<T> comparator, int low, int middle, int high) {
+    private static <T> void merge(T[] array, Comparator<? super T> comparator, int low, int middle, int high) {
         T[] leftArray = (T[]) new Comparable[middle - low + 1];
         T[] rightArray = (T[]) new Comparable[high - middle];
 

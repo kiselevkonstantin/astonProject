@@ -73,9 +73,17 @@ public class Validation {
         }
     }
 
-    public static void validateListNotEmpty(List<?> list) {
+    public static void validateListNotEmpty(List<?> list) throws RuntimeException {
         if (list.isEmpty()) {
             throw new RuntimeException("Невозможно выполнить сейчас. Список пуст.");
+        }
+    }
+
+    public static void validateInputSource(String inputSource) throws RuntimeException {
+        try {
+            Integer.parseInt(inputSource);
+        } catch (RuntimeException _) {
+            throw new RuntimeException("Неверный выбор. Попробуйте еще раз.");
         }
     }
 

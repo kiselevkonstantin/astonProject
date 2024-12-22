@@ -4,7 +4,9 @@ import org.example.application.dataclass.Animal;
 import org.example.application.dataclass.Barrel;
 import org.example.application.dataclass.Person;
 import org.example.application.input.ConsoleInput;
+import org.example.application.input.FileInput;
 import org.example.application.input.InputReader;
+import org.example.application.input.RandomInput;
 import org.example.application.utils.TimSort;
 import org.example.application.utils.Validation;
 
@@ -52,12 +54,26 @@ public class App {
 
     private void printStartMenu() {
         System.out.println("Выберите действие:");
-        System.out.println("1. Заполнить данные (Животные):");
-        System.out.println("2. Заполнить данные (Бочки):");
-        System.out.println("3. Заполнить данные (Люди):");
-        System.out.println("4. Сортировать данные:");
+        System.out.println("1. Заполнить данные (Животные)");
+        System.out.println("2. Заполнить данные (Бочки)");
+        System.out.println("3. Заполнить данные (Люди)");
+        System.out.println("4. Сортировать данные");
         System.out.println("5. Искать элемент");
         System.out.println("6. Выход");
+    }
+
+    private void printInputSourceMenu() {
+        System.out.println("Заполнить данные:");
+        System.out.println("1. Вручную");
+        System.out.println("2. Из файла");
+        System.out.println("3. Случайным образом");
+    }
+
+    private int selectInputSource(Scanner scanner) {
+        printInputSourceMenu();
+        String inputSource = scanner.next();
+        Validation.validateInputSource(inputSource);
+        return Integer.parseInt(inputSource);
     }
 
     private int getLength(Scanner scanner) {
@@ -68,9 +84,18 @@ public class App {
     }
 
     private ArrayList<?> getList(Class<?> tClass, Scanner scanner) {
-        int length = getLength(scanner);
+        int inputSource = selectInputSource(scanner);
         InputReader inputReader = new InputReader(scanner);
-        inputReader.setInputSource(new ConsoleInput());
+        switch (inputSource) {
+            case 1 -> inputReader.setInputSource(new ConsoleInput());
+            case 2 -> inputReader.setInputSource(new FileInput());
+            case 3 -> inputReader.setInputSource(new RandomInput());
+            default -> {
+                System.out.println("Неверный выбор. Попробуйте еще раз.");
+                return null;
+            }
+        }
+        int length = getLength(scanner);
         return inputReader.read(tClass, length);
     }
 

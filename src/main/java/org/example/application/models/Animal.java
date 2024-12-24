@@ -1,4 +1,4 @@
-package org.example;
+package org.example.application.models;
 
 public class Animal implements Comparable<Animal> {
     private final String type; // Вид животного

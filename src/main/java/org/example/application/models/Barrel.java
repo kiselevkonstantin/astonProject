@@ -1,4 +1,4 @@
-package org.example;
+package org.example.application.models;
 
 public class Barrel implements Comparable<Barrel> {
     private final double volume; // Объем
@@ -6,13 +6,15 @@ public class Barrel implements Comparable<Barrel> {
     private final String material; // Материал из которого изготовлена
 
     //Геттеры для получения информации по полям
-    public  Double getVolume(){
+    public Double getVolume() {
         return volume;
     }
-    public  String getContent(){
+
+    public String getContent() {
         return content;
     }
-    public String getMaterial(){
+
+    public String getMaterial() {
         return material;
     }
 
@@ -22,6 +24,7 @@ public class Barrel implements Comparable<Barrel> {
         this.content = builder.content;
         this.material = builder.material;
     }
+
     // Вложенный статический класс Builder
     public static class BarrelBuilder {
         private double volume;
@@ -67,6 +70,6 @@ public class Barrel implements Comparable<Barrel> {
     @Override
     public String toString() {
         return "В бочке из " + material + " объёмом  " + volume +
-                " хранится - " + content  + ".";
+                " хранится - " + content + ".";
     }
 }

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.application.models;
 
 public class Person implements Comparable<Person> {
     private final String gender; // Пол человека

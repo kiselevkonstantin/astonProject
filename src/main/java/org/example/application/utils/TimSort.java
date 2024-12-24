@@ -17,7 +17,7 @@ public class TimSort {
         }
     }
 
-    public static <T> void sort(T[] array, Comparator<? super T> comparator) {
+    private static <T> void sort(T[] array, Comparator<? super T> comparator) {
         for (int start = 0; start < array.length; start += MIN_RUN_SIZE) {
             int end = Math.min((start + MIN_RUN_SIZE - 1), (array.length - 1));
             sort(array, comparator, start, end);

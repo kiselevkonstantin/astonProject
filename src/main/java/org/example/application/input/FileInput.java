@@ -16,99 +16,87 @@ public class FileInput implements InputSource {
     @Override
     public <T> ArrayList<T> read(Class<? extends T> someClass, int length, Scanner scanner) {
         ArrayList<T> listObjects = new ArrayList<>();
-
-        try {
-            List<String> content = readFileContent(scanner);
-            Validation.validateContentFileSize(content.size(), length);
-            switch (someClass.getSimpleName()) {
-                case "Animal" -> {
-                    for (int i = 0; i < length; i++) {
-                        listObjects.add(someClass.cast(createAnimal(content.get(i))));
-                    }
-                }
-                case "Person" -> {
-                    for (int i = 0; i < length; i++) {
-                        listObjects.add(someClass.cast(createPerson(content.get(i))));
-                    }
-                }
-                case "Barrel" -> {
-                    for (int i = 0; i < length; i++) {
-                        listObjects.add(someClass.cast(createBarrel(content.get(i))));
-                    }
-                }
-                default -> {
-                    return null;
+        List<String> content = readFileContent(scanner);
+        Validation.validateContentFileSize(content.size(), length);
+        switch (someClass.getSimpleName()) {
+            case "Animal" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createAnimal(content.get(i))));
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            case "Person" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createPerson(content.get(i))));
+                }
+            }
+            case "Barrel" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createBarrel(content.get(i))));
+                }
+            }
+            default -> {
+                return null;
+            }
         }
-
         return listObjects;
     }
 
-    private List<String> readFileContent(Scanner scanner) throws IOException {
+    private List<String> readFileContent(Scanner scanner) {
         System.out.println("Укажите путь к файлу: ");
         String filePath = scanner.nextLine();
-        Path path = Path.of(filePath);
         Validation.validateFilePath(filePath);
+        Path path = Path.of(filePath);
         List<String> content = new ArrayList<>();
         try {
             content = Files.readAllLines(path);
-        } catch (IOException e) {
-            System.out.printf("Ошибка чтения файла. %s%n", e.getMessage());
+        } catch (IOException _) {
         }
-
         return content;
     }
 
-    private Animal createAnimal(String str) {
-        str = str.trim();
-        String[] values = str.split(",");
+    private Animal createAnimal(String data) {
+        String[] values = data.split(",");
         Validation.validatePropertyLength(values.length);
         String type = values[0];
         String eyeColor = values[1];
-        boolean hasFur = Boolean.parseBoolean(values[2]);
-        Validation.validateBooleanProperty(String.valueOf(hasFur));
-        return new Animal.AnimalBuilder()
+        String hasFur = values[2];
+        Validation.validateBooleanProperty(hasFur);
+        return new Animal.Builder()
                 .setType(type)
                 .setEyeColor(eyeColor)
-                .setFur(hasFur)
+                .setFur(Boolean.parseBoolean(hasFur))
                 .build();
     }
 
-    private Person createPerson(String str) {
-        str = str.trim();
-        String[] values = str.split(",");
+    private Person createPerson(String data) {
+        String[] values = data.split(",");
         Validation.validatePropertyLength(values.length);
         String gender = values[0];
-        Validation.validateSex(gender);
+        Validation.validateGender(gender);
         String age = values[1];
         Validation.validateAge(age);
         String lastName = values[2];
-        Validation.validateName(lastName);
-        return new Person.PersonBuilder()
+        Validation.validateLastName(lastName);
+        return new Person.Builder()
                 .setGender(gender)
                 .setAge(Integer.parseInt(age))
                 .setLastName(lastName)
                 .build();
     }
 
-    private Barrel createBarrel(String str) {
-        str = str.trim();
-        String[] values = str.split(",");
+    private Barrel createBarrel(String data) {
+        String[] values = data.split(",");
         Validation.validatePropertyLength(values.length);
-        double volume = Double.parseDouble(values[0]);
+        String volume = values[0];
         Validation.validateVolume(volume);
         String content = values[1];
         String material = values[2];
-        return new Barrel.BarrelBuilder()
-                .setVolume(volume)
+        return new Barrel.Builder()
+                .setVolume(Double.parseDouble(volume))
                 .setContent(content)
                 .setMaterial(material)
                 .build();
     }
-
 }
 
 

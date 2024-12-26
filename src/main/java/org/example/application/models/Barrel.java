@@ -19,32 +19,32 @@ public class Barrel implements Comparable<Barrel> {
     }
 
     //Корнструктор класса Barrel для использования Builder
-    private Barrel(BarrelBuilder builder) {
+    private Barrel(Builder builder) {
         this.volume = builder.volume;
         this.content = builder.content;
         this.material = builder.material;
     }
 
     // Вложенный статический класс Builder
-    public static class BarrelBuilder {
+    public static class Builder {
         private double volume;
         private String content;
         private String material;
 
         // Метод для присвоения бочке объёма
-        public BarrelBuilder setVolume(Double volume) {
+        public Builder setVolume(Double volume) {
             this.volume = volume;
             return this;
         }
 
         // Метод для присвоения бочке хранимого материала
-        public BarrelBuilder setContent(String content) {
+        public Builder setContent(String content) {
             this.content = content;
             return this;
         }
 
         // Метод для присвоения материала из которого бочка изготовлена
-        public BarrelBuilder setMaterial(String material) {
+        public Builder setMaterial(String material) {
             this.material = material;
             return this;
         }
@@ -69,7 +69,7 @@ public class Barrel implements Comparable<Barrel> {
 
     @Override
     public String toString() {
-        return "В бочке из " + material + " объёмом  " + volume +
+        return "В бочке из " + material + " объёмом " + volume +
                 " хранится - " + content + ".";
     }
 }

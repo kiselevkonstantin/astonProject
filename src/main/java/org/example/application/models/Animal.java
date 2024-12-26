@@ -6,42 +6,45 @@ public class Animal implements Comparable<Animal> {
     private final boolean fur; // Есть ли шерсть
 
     //Геттеры для получения информации по полям
-    public  String getType(){
+    public String getType() {
         return type;
     }
-    public  String getEyeColor(){
+
+    public String getEyeColor() {
         return eyeColor;
     }
-    public boolean isFur(){
+
+    public boolean isFur() {
         return fur;
     }
 
     //Корнструктор класса Animal для использования Builder
-    private Animal(AnimalBuilder builder) {
+    private Animal(Builder builder) {
         this.type = builder.type;
         this.eyeColor = builder.eyeColor;
         this.fur = builder.fur;
     }
+
     // Вложенный статический класс Builder
-    public static class AnimalBuilder {
+    public static class Builder {
         private String type;
         private String eyeColor;
         private boolean fur;
 
         // Метод для присвоения вида животного
-        public AnimalBuilder setType(String type) {
+        public Builder setType(String type) {
             this.type = type;
             return this;
         }
 
         // Метод для присвоения цвета глаз животного
-        public AnimalBuilder setEyeColor(String eyeColor) {
+        public Builder setEyeColor(String eyeColor) {
             this.eyeColor = eyeColor;
             return this;
         }
 
         // Метод для определения есть ли шерсть у животного? (true/false)
-        public AnimalBuilder setFur(boolean fur) {
+        public Builder setFur(boolean fur) {
             this.fur = fur;
             return this;
         }

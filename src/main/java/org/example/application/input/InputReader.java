@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InputReader {
-    private InputSource inputType = null;
+    private InputSource inputSource = null;
     private final Scanner scanner;
 
-    public InputReader (Scanner scanner) {
+    public InputReader(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public void setInputSource(InputSource inputType){
-        this.inputType = inputType;
+    public void setInputSource(InputSource inputSource) {
+        this.inputSource = inputSource;
     }
-    public <T> ArrayList<T> executeReading(Class<? extends T> someClass, int length, Scanner scanner){
-        return inputType.read(someClass, length, scanner);
+
+    public <T> ArrayList<T> read(Class<? extends T> someClass, int length) {
+        return inputSource.read(someClass, length, scanner);
     }
 }

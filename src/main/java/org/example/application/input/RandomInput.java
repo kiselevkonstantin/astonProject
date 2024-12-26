@@ -13,31 +13,31 @@ public class RandomInput implements InputSource {
     public <T> ArrayList<T> read(Class<? extends T> someClass, int length, Scanner scanner) {
         Faker faker = new Faker();
         ArrayList<T> listObjects = new ArrayList<>();
-
-        if (someClass.getSimpleName().equals("Animal")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createAnimal(faker)));
+        switch (someClass.getSimpleName()) {
+            case "Animal" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createAnimal(faker)));
+                }
             }
-        } else if (someClass.getSimpleName().equals("Person")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createPerson(faker)));
+            case "Person" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createPerson(faker)));
+                }
             }
-        } else if (someClass.getSimpleName().equals("Barrel")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createBarrel(faker)));
+            case "Barrel" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createBarrel(faker)));
+                }
             }
-        } else {
-            return null;
+            default -> {
+                return null;
+            }
         }
-
         return listObjects;
     }
 
-    private Animal createAnimal(Faker faker){
-        return new Animal.AnimalBuilder()
+    private Animal createAnimal(Faker faker) {
+        return new Animal.Builder()
                 .setType(faker.animal().name())
                 .setEyeColor(faker.color().name())
                 .setFur(faker.random().nextBoolean())
@@ -45,18 +45,18 @@ public class RandomInput implements InputSource {
     }
 
     private Person createPerson(Faker faker) {
-        return new Person.PersonBuilder()
+        return new Person.Builder()
                 .setGender(faker.regexify("м|ж"))
                 .setAge(faker.random().nextInt(10, 100))
                 .setLastName(faker.name().lastName())
                 .build();
     }
+
     private Barrel createBarrel(Faker faker) {
-        return new Barrel.BarrelBuilder()
-                .setVolume(Double.valueOf(faker.random().nextInt(100, 1000)))
+        return new Barrel.Builder()
+                .setVolume(faker.random().nextDouble() * faker.random().nextInt(10, 100))
                 .setContent(faker.commerce().productName())
                 .setMaterial(faker.commerce().material())
                 .build();
     }
-
 }

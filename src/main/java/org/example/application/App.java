@@ -7,6 +7,7 @@ import org.example.application.input.RandomInput;
 import org.example.application.models.Animal;
 import org.example.application.models.Barrel;
 import org.example.application.models.Person;
+import org.example.application.output.OutputWriter;
 import org.example.application.utils.BinSearch;
 import org.example.application.utils.TimSort;
 import org.example.application.utils.Validation;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
+    private static final String LOG_FILENAME = "log.txt";
+
     public void run() {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
@@ -39,12 +42,25 @@ public class App {
                         tClass = Person.class;
                         list = getList(tClass, scanner);
                     }
-                    case 4 -> sortList(list, tClass);
-                    case 5 -> {
-                        int index = findElement(list, tClass, scanner);
-                        System.out.println(index != -1 ? "Список предварительно отсортирован.\nЭлемент найден под индексом %d".formatted(index) : "Элемент не найден");
+                    case 4 -> {
+                        Validation.validateListNotEmpty(list);
+                        sortList(list, tClass);
+                        OutputWriter.append(LOG_FILENAME, list.toString());
                     }
-                    case 6 -> printList(list);
+                    case 5 -> {
+                        Validation.validateListNotEmpty(list);
+                        Object element = getElement(tClass, scanner);
+                        int index = findElement(list, tClass, element);
+                        String result = index == -1 ?
+                                "В отсортированных данных элемент %s не найден".formatted(element) :
+                                "В отсортированных данных элемент %s найден под индексом %d".formatted(element, index);
+                        System.out.println(result);
+                        OutputWriter.append(LOG_FILENAME, result);
+                    }
+                    case 6 -> {
+                        Validation.validateListNotEmpty(list);
+                        printList(list);
+                    }
                     case 7 -> running = false;
                     default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
                 }
@@ -104,7 +120,6 @@ public class App {
     }
 
     private void sortList(ArrayList<?> list, Class<?> tClass) {
-        Validation.validateListNotEmpty(list);
         switch (tClass.getSimpleName()) {
             case "Animal" -> TimSort.run((ArrayList<Animal>) list, Animal::compareTo);
             case "Barrel" -> TimSort.run((ArrayList<Barrel>) list, Barrel::compareTo);
@@ -114,23 +129,29 @@ public class App {
         }
     }
 
-    private int findElement(ArrayList<?> list, Class<?> tClass, Scanner scanner) {
-        Validation.validateListNotEmpty(list);
+    private Object getElement(Class<?> tClass, Scanner scanner) {
+        Object element = null;
+        switch (tClass.getSimpleName()) {
+            case "Animal" -> element = ConsoleInput.createAnimal(scanner);
+            case "Barrel" -> element = ConsoleInput.createBarrel(scanner);
+            case "Person" -> element = ConsoleInput.createPerson(scanner);
+        }
+        return element;
+    }
+
+    private int findElement(ArrayList<?> list, Class<?> tClass, Object key) {
         switch (tClass.getSimpleName()) {
             case "Animal" -> {
-                Animal key = ConsoleInput.createAnimal(scanner);
                 TimSort.run((ArrayList<Animal>) list, Animal::compareTo);
-                return BinSearch.run((ArrayList<Animal>) list, key, Animal::compareTo);
+                return BinSearch.run((ArrayList<Animal>) list, (Animal) key, Animal::compareTo);
             }
             case "Barrel" -> {
-                Barrel key = ConsoleInput.createBarrel(scanner);
                 TimSort.run((ArrayList<Barrel>) list, Barrel::compareTo);
-                return BinSearch.run((ArrayList<Barrel>) list, key, Barrel::compareTo);
+                return BinSearch.run((ArrayList<Barrel>) list, (Barrel) key, Barrel::compareTo);
             }
             case "Person" -> {
-                Person key = ConsoleInput.createPerson(scanner);
                 TimSort.run((ArrayList<Person>) list, Person::compareTo);
-                return BinSearch.run((ArrayList<Person>) list, key, Person::compareTo);
+                return BinSearch.run((ArrayList<Person>) list, (Person) key, Person::compareTo);
             }
         }
         return -1;

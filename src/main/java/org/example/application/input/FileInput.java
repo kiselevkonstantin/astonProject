@@ -20,20 +20,25 @@ public class FileInput implements InputSource {
         try {
             List<String> content = readFileContent(scanner);
             Validation.validateContentFileSize(content.size(), length);
-            if (someClass.getSimpleName().equals("Animal")) {
-                for (int i = 0; i < length; i++) {
-                    listObjects.add(someClass.cast(createAnimal(content.get(i))));
+            switch (someClass.getSimpleName()) {
+                case "Animal" -> {
+                    for (int i = 0; i < length; i++) {
+                        listObjects.add(someClass.cast(createAnimal(content.get(i))));
+                    }
                 }
-            } else if (someClass.getSimpleName().equals("Person")) {
-                for (int i = 0; i < length; i++) {
-                    listObjects.add(someClass.cast(createPerson(content.get(i))));
+                case "Person" -> {
+                    for (int i = 0; i < length; i++) {
+                        listObjects.add(someClass.cast(createPerson(content.get(i))));
+                    }
                 }
-            } else if (someClass.getSimpleName().equals("Barrel")) {
-                for (int i = 0; i < length; i++) {
-                    listObjects.add(someClass.cast(createBarrel(content.get(i))));
+                case "Barrel" -> {
+                    for (int i = 0; i < length; i++) {
+                        listObjects.add(someClass.cast(createBarrel(content.get(i))));
+                    }
                 }
-            } else {
-                return null;
+                default -> {
+                    return null;
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -78,12 +83,13 @@ public class FileInput implements InputSource {
         Validation.validatePropertyLength(values.length);
         String gender = values[0];
         Validation.validateSex(gender);
-        int age = Integer.parseInt(values[1]);
+        String age = values[1];
         Validation.validateAge(age);
         String lastName = values[2];
+        Validation.validateName(lastName);
         return new Person.PersonBuilder()
                 .setGender(gender)
-                .setAge(age)
+                .setAge(Integer.parseInt(age))
                 .setLastName(lastName)
                 .build();
     }
@@ -104,4 +110,6 @@ public class FileInput implements InputSource {
     }
 
 }
+
+
 

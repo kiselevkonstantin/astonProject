@@ -23,9 +23,9 @@ public class Validation {
         }
     }
 
-    public static void validateAge(int age) throws RuntimeException {
+    public static void validateAge(String age) throws RuntimeException {
         try {
-            if (age <= 0) {
+            if (Integer.parseInt(age) <= 0) {
                 throw new RuntimeException();
             }
         } catch (RuntimeException _) {
@@ -87,6 +87,13 @@ public class Validation {
         }
     }
 
+    public static void validateName(String name) {
+        if (!name.matches("^[a-zA-Zа-яА-ЯёЁ]+$")) {
+            throw new RuntimeException("Неверный формат имени");
+        }
+    }
+
     public Validation() {
     }
+
 }

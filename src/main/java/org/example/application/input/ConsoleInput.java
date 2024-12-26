@@ -13,27 +13,26 @@ public class ConsoleInput implements InputSource {
     public <T> ArrayList<T> read(Class<? extends T> someClass, int length, Scanner scanner) {
         ArrayList<T> listObjects = new ArrayList<>();
 
-
-        if (someClass.getSimpleName().equals("Animal")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createAnimal(scanner)));
+        switch (someClass.getSimpleName()) {
+            case "Animal" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createAnimal(scanner)));
+                }
             }
-        } else if (someClass.getSimpleName().equals("Person")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createPerson(scanner)));
+            case "Person" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createPerson(scanner)));
+                }
             }
-        } else if (someClass.getSimpleName().equals("Barrel")) {
-            for (int i = 0; i < length; i++) {
-                listObjects
-                        .add(someClass.cast(createBarrel(scanner)));
+            case "Barrel" -> {
+                for (int i = 0; i < length; i++) {
+                    listObjects.add(someClass.cast(createBarrel(scanner)));
+                }
             }
-        } else {
-            return null;
+            default -> {
+                return null;
+            }
         }
-
-
         return listObjects;
     }
 
@@ -43,27 +42,28 @@ public class ConsoleInput implements InputSource {
         System.out.println("Цвет глаз: ");
         String eyeColor = scanner.nextLine();
         System.out.println("Есть шерсть? (true/false): ");
-        boolean hasFur = Boolean.parseBoolean(scanner.nextLine());
-        Validation.validateBooleanProperty(String.valueOf(hasFur));
+        String hasFur = scanner.nextLine();
+        Validation.validateBooleanProperty(hasFur);
         return new Animal.AnimalBuilder()
                 .setType(type)
                 .setEyeColor(eyeColor)
-                .setFur(hasFur)
+                .setFur(Boolean.parseBoolean(hasFur))
                 .build();
     }
 
     public static Person createPerson(Scanner scanner) {
         System.out.println("Фамилия: ");
         String lastName = scanner.nextLine();
+        Validation.validateName(lastName);
         System.out.println("Возраст: ");
-        int age = Integer.parseInt(scanner.nextLine());
+        String age = scanner.nextLine();
         Validation.validateAge(age);
         System.out.println("Пол: ");
         String gender = scanner.nextLine();
         Validation.validateSex(gender);
         return new Person.PersonBuilder()
                 .setGender(gender)
-                .setAge(age)
+                .setAge(Integer.parseInt(age))
                 .setLastName(lastName)
                 .build();
     }

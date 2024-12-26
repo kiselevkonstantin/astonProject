@@ -12,7 +12,6 @@ public class ConsoleInput implements InputSource {
     @Override
     public <T> ArrayList<T> read(Class<? extends T> someClass, int length, Scanner scanner) {
         ArrayList<T> listObjects = new ArrayList<>();
-
         switch (someClass.getSimpleName()) {
             case "Animal" -> {
                 for (int i = 0; i < length; i++) {
@@ -44,7 +43,7 @@ public class ConsoleInput implements InputSource {
         System.out.println("Есть шерсть? (true/false): ");
         String hasFur = scanner.nextLine();
         Validation.validateBooleanProperty(hasFur);
-        return new Animal.AnimalBuilder()
+        return new Animal.Builder()
                 .setType(type)
                 .setEyeColor(eyeColor)
                 .setFur(Boolean.parseBoolean(hasFur))
@@ -54,14 +53,14 @@ public class ConsoleInput implements InputSource {
     public static Person createPerson(Scanner scanner) {
         System.out.println("Фамилия: ");
         String lastName = scanner.nextLine();
-        Validation.validateName(lastName);
+        Validation.validateLastName(lastName);
         System.out.println("Возраст: ");
         String age = scanner.nextLine();
         Validation.validateAge(age);
         System.out.println("Пол: ");
         String gender = scanner.nextLine();
-        Validation.validateSex(gender);
-        return new Person.PersonBuilder()
+        Validation.validateGender(gender);
+        return new Person.Builder()
                 .setGender(gender)
                 .setAge(Integer.parseInt(age))
                 .setLastName(lastName)
@@ -70,14 +69,14 @@ public class ConsoleInput implements InputSource {
 
     public static Barrel createBarrel(Scanner scanner) {
         System.out.println("Введите объём: ");
-        double volume = Double.parseDouble(scanner.nextLine());
+        String volume = scanner.nextLine();
         Validation.validateVolume(volume);
         System.out.println("Что внутри?: ");
         String content = scanner.nextLine();
         System.out.println("Какой материал бочки?: ");
         String material = scanner.nextLine();
-        return new Barrel.BarrelBuilder()
-                .setVolume(volume)
+        return new Barrel.Builder()
+                .setVolume(Double.parseDouble(volume))
                 .setContent(content)
                 .setMaterial(material)
                 .build();

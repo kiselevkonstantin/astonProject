@@ -1,6 +1,9 @@
 package org.example;
 
-import org.example.application.input.*;
+import org.example.application.input.ConsoleInput;
+import org.example.application.input.FileInput;
+import org.example.application.input.InputReader;
+import org.example.application.input.RandomInput;
 import org.example.application.models.Animal;
 import org.example.application.models.Barrel;
 import org.example.application.models.Person;
@@ -101,7 +104,7 @@ public class Main {
             }
         }
         int length = getLength(scanner);
-        return inputReader.executeReading(tClass, length, scanner);
+        return inputReader.read(tClass, length);
     }
 
     private static void sortList(ArrayList<?> list, Class<?> tClass) {

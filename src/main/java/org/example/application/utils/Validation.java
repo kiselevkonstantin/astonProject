@@ -33,19 +33,19 @@ public class Validation {
         }
     }
 
-    public static void validateSex(String sex) throws RuntimeException {
+    public static void validateGender(String sex) throws RuntimeException {
         if (!sex.equals("м") && !sex.equals("ж")) {
             throw new RuntimeException("Неверный пол (м/ж)");
         }
     }
 
-    public static void validateVolume(double volume) throws RuntimeException {
+    public static void validateVolume(String volume) throws RuntimeException {
         try {
-            if (volume < 0) {
+            if (Double.parseDouble(volume) <= 0) {
                 throw new RuntimeException();
             }
         } catch (RuntimeException _) {
-            throw new RuntimeException("Неверный объем бочки (целое число)");
+            throw new RuntimeException("Неверный объем бочки (положительное число)");
         }
     }
 
@@ -87,7 +87,7 @@ public class Validation {
         }
     }
 
-    public static void validateName(String name) {
+    public static void validateLastName(String name) {
         if (!name.matches("^[a-zA-Zа-яА-ЯёЁ]+$")) {
             throw new RuntimeException("Неверный формат имени");
         }
